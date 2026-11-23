@@ -1,0 +1,71 @@
+{
+  "left": {
+    "start": 0,
+    "stop": 8000,
+    "certificates": [
+      {
+        "id": "C-A",
+        "instrument": "A",
+        "start": 0,
+        "stop": 7000,
+        "offset_db": 0
+      },
+      {
+        "id": "C-B",
+        "instrument": "B",
+        "start": 2000,
+        "stop": 5000,
+        "offset_db": 10
+      }
+    ],
+    "readings": [
+      {
+        "id": "R1",
+        "instrument": "A",
+        "start": 0,
+        "stop": 6000,
+        "db": 50,
+        "priority": 1
+      },
+      {
+        "id": "R2",
+        "instrument": "B",
+        "start": 1000,
+        "stop": 6000,
+        "db": 50,
+        "priority": 2
+      },
+      {
+        "id": "R3",
+        "instrument": "A",
+        "start": 4000,
+        "stop": 5000,
+        "db": 90,
+        "priority": 2
+      }
+    ]
+  },
+  "right": {
+    "start": 1000,
+    "stop": 7500,
+    "certificates": [
+      {
+        "id": "C-C",
+        "instrument": "C",
+        "start": 1000,
+        "stop": 8000,
+        "offset_db": 0
+      }
+    ],
+    "readings": [
+      {
+        "id": "BAD",
+        "instrument": "C",
+        "start": 0,
+        "stop": 9,
+        "db": 200,
+        "priority": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "project_shape": "backend",
+  "modules": [
+    {
+      "id": "app",
+      "path": "soundstrip/app.py",
+      "responsibility": "注册该服务公开数据入口"
+    },
+    {
+      "id": "http_service",
+      "path": "soundstrip/http_service.py",
+      "responsibility": "限定请求方法、内容体积和 JSON 传输边界"
+    },
+    {
+      "id": "contract",
+      "path": "soundstrip/contract.py",
+      "responsibility": "严格字段、范围及标识去重"
+    },
+    {
+      "id": "calibration",
+      "path": "soundstrip/calibration.py",
+      "responsibility": "证书生效边界"
+    },
+    {
+      "id": "splice",
+      "path": "soundstrip/splice.py",
+      "responsibility": "多源优先级仲裁"
+    },
+    {
+      "id": "exposure",
+      "path": "soundstrip/exposure.py",
+      "responsibility": "时间加权声能"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "exposure",
+      "name": "拼接单条巡测并归约声暴露",
+      "entry": "POST /soundstrip/exposure",
+      "success": "窗口内有效 5000 毫秒而不是 8000，等效级约 56.63 dB",
+      "failure": "对照 examples/exposure.invalid.json 返回 400 和错误说明",
+      "verification": "python3 -B -m examples.check exposure",
+      "steps": [
+        "接收 /soundstrip/exposure",
+        "拼接单条巡测并归约声暴露",
+        "返回计算后的证据或合成结果"
+      ],
+      "module_ids": [
+        "app",
+        "http_service",
+        "exposure",
+        "calibration",
+        "splice",
+        "contract"
+      ]
+    },
+    {
+      "id": "compare",
+      "name": "计算两次巡测共同覆盖上的声级差",
+      "entry": "POST /soundstrip/compare",
+      "success": "仅 4000 毫秒双侧共用，右减左约 −7.40 dB",
+      "failure": "对照 examples/compare.invalid.json 返回 400 和错误说明",
+      "verification": "python3 -B -m examples.check compare",
+      "steps": [
+        "接收 /soundstrip/compare",
+        "计算两次巡测共同覆盖上的声级差",
+        "返回计算后的证据或合成结果"
+      ],
+      "module_ids": [
+        "app",
+        "http_service",
+        "exposure",
+        "calibration",
+        "splice",
+        "contract"
+      ]
+    },
+    {
+      "id": "coverage",
+      "name": "导出拒用、缺口和择取证据",
+      "entry": "POST /soundstrip/coverage",
+      "success": "冲突、缺口、无证书的来源分别可见",
+      "failure": "对照 examples/coverage.invalid.json 返回 400 和错误说明",
+      "verification": "python3 -B -m examples.check coverage",
+      "steps": [
+        "接收 /soundstrip/coverage",
+        "导出拒用、缺口和择取证据",
+        "返回计算后的证据或合成结果"
+      ],
+      "module_ids": [
+        "app",
+        "http_service",
+        "exposure",
+        "calibration",
+        "splice",
+        "contract"
+      ]
+    }
+  ],
+  "complexity": {
+    "mechanisms": [
+      "证书生效边界",
+      "多源优先级仲裁",
+      "时间加权声能",
+      "共同有效覆盖比较"
+    ]
+  }
+}

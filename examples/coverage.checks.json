@@ -1,0 +1,28 @@
+[
+  [
+    [
+      "fragments",
+      1,
+      "uncalibrated"
+    ],
+    [
+      "R2"
+    ]
+  ],
+  [
+    [
+      "fragments",
+      3,
+      "status"
+    ],
+    "conflict"
+  ],
+  [
+    [
+      "fragments",
+      -1,
+      "status"
+    ],
+    "gap"
+  ]
+]

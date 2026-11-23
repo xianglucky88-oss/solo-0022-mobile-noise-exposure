@@ -1,0 +1,23 @@
+{
+  "language": "Python",
+  "project_shape": "backend",
+  "source_extensions": [
+    ".py"
+  ],
+  "testing": "deferred",
+  "build_command": "python3 -B -c \"from pathlib import Path; [compile(p.read_bytes(),str(p),'exec') for d in ('soundstrip', 'examples') for p in Path(d).glob('*.py')]\"",
+  "workflow_checks": [
+    {
+      "workflow_id": "exposure",
+      "command": "python3 -B -m examples.check exposure"
+    },
+    {
+      "workflow_id": "compare",
+      "command": "python3 -B -m examples.check compare"
+    },
+    {
+      "workflow_id": "coverage",
+      "command": "python3 -B -m examples.check coverage"
+    }
+  ]
+}
