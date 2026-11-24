@@ -27,6 +27,11 @@
       "responsibility": "多源优先级仲裁"
     },
     {
+      "id": "window",
+      "path": "soundstrip/window.py",
+      "responsibility": "定长窗口支持复核与峰值窗选择"
+    },
+    {
       "id": "exposure",
       "path": "soundstrip/exposure.py",
       "responsibility": "时间加权声能"
@@ -95,6 +100,48 @@
         "splice",
         "contract"
       ]
+    },
+    {
+      "id": "peak",
+      "name": "选出等效级最高的定长窗口",
+      "entry": "POST /soundstrip/peak",
+      "success": "0–10 毫秒、窗长 4 毫秒时峰值窗 [4, 8)，整窗由备机证书支持，约 68.75 dB",
+      "failure": "对照 examples/peak.invalid.json 返回 400 和错误说明",
+      "verification": "python3 -B -m examples.check peak",
+      "steps": [
+        "接收 /soundstrip/peak",
+        "按单机单证与最弱优先级口径评估候选起点",
+        "返回峰值窗、实际证书与贡献读数"
+      ],
+      "module_ids": [
+        "app",
+        "http_service",
+        "window",
+        "exposure",
+        "calibration",
+        "contract"
+      ]
+    },
+    {
+      "id": "window",
+      "name": "复核指定定长窗口的可用性",
+      "entry": "POST /soundstrip/window",
+      "success": "[4, 8) 可用，贡献读数 B0、B1，证书 C-BACKUP",
+      "failure": "对照 examples/window.invalid.json 返回 400 和错误说明",
+      "verification": "python3 -B -m examples.check window",
+      "steps": [
+        "接收 /soundstrip/window",
+        "复核指定起点的定长窗口支持与仲裁",
+        "返回可用性、实际证书与贡献读数"
+      ],
+      "module_ids": [
+        "app",
+        "http_service",
+        "window",
+        "exposure",
+        "calibration",
+        "contract"
+      ]
     }
   ],
   "complexity": {
@@ -102,7 +149,9 @@
       "证书生效边界",
       "多源优先级仲裁",
       "时间加权声能",
-      "共同有效覆盖比较"
+      "共同有效覆盖比较",
+      "定长窗口支持与最弱优先级仲裁",
+      "非逐毫秒峰值窗搜索"
     ]
   }
 }

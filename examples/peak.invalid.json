@@ -1,0 +1,55 @@
+{
+  "start": 0,
+  "stop": 10,
+  "window_ms": 0,
+  "certificates": [
+    {
+      "id": "C-BACKUP",
+      "instrument": "backup",
+      "start": 0,
+      "stop": 10,
+      "offset_db": 0
+    },
+    {
+      "id": "C-MAIN",
+      "instrument": "main",
+      "start": 5,
+      "stop": 7,
+      "offset_db": 0
+    }
+  ],
+  "readings": [
+    {
+      "id": "B0",
+      "instrument": "backup",
+      "start": 0,
+      "stop": 5,
+      "db": 40,
+      "priority": 1
+    },
+    {
+      "id": "B1",
+      "instrument": "backup",
+      "start": 5,
+      "stop": 8,
+      "db": 70,
+      "priority": 1
+    },
+    {
+      "id": "B2",
+      "instrument": "backup",
+      "start": 8,
+      "stop": 10,
+      "db": 40,
+      "priority": 1
+    },
+    {
+      "id": "A0",
+      "instrument": "main",
+      "start": 5,
+      "stop": 7,
+      "db": 90,
+      "priority": 2
+    }
+  ]
+}

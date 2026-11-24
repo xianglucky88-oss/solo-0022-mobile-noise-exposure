@@ -18,6 +18,14 @@
     {
       "workflow_id": "coverage",
       "command": "python3 -B -m examples.check coverage"
+    },
+    {
+      "workflow_id": "peak",
+      "command": "python3 -B -m examples.check peak"
+    },
+    {
+      "workflow_id": "window",
+      "command": "python3 -B -m examples.check window"
     }
   ]
 }

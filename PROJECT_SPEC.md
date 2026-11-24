@@ -8,6 +8,8 @@
 
 - 请求内已处于同一合成毫秒时轴，所有 `[start,stop)` 左闭右开。证书 `certificates` 含 `id,instrument,start,stop,offset_db`；同一仪器的证书有效期不重叠。读数 `readings` 含 `id,instrument,start,stop,db,priority`，优先级数字越大越优先。输入声级在给定此段内按常值处理。
 - `coverage` 按窗口、读数和相关证书边界切片，返回原始读数及有效证书。合法候选按优先级择取，并列最高拒选；没证书与没读数分别记录。高优先级但无证书不挡住已证实的低优先级来源。
+- `window` 复核指定起点的定长窗口：单机单证支持、窗内片段择取、跨机最弱优先级仲裁与并列争议；给出实际证书与贡献读数。
+- `peak` 按同一口径在巡测区间内选等效级最高的定长窗口，起点取自读数与证书边界（可落在非原始记录断点），不逐毫秒试遍时轴；最高相同取最早。证书右端点不计入覆盖，同机接续证书不得合用。无可用窗时区分连续观测或证书不足（`insufficient_observation`）与读数完整但优先级争议（`priority_dispute`）。
 - `exposure` 根据获接受部分的声能与实际覆盖长度换算等效声级，无覆盖为 `null`。`compare` 的 `left` 与 `right` 是时轴已对齐的两份巡测，差值用共同有效时间上右侧与左侧的声能比计算，零共同覆盖时差值为 `null`。不假设未测区域安静，不作实地合规结论。
 
 ## 入口和可观察结果
@@ -17,6 +19,8 @@
 | `POST /soundstrip/exposure` | 拼接单条巡测并归约声暴露 | 窗口内有效 5000 毫秒而不是 8000，等效级约 56.63 dB | [`exposure.json`](examples/exposure.json) |
 | `POST /soundstrip/compare` | 计算两次巡测共同覆盖上的声级差 | 仅 4000 毫秒双侧共用，右减左约 −7.40 dB | [`compare.json`](examples/compare.json) |
 | `POST /soundstrip/coverage` | 导出拒用、缺口和择取证据 | 冲突、缺口、无证书的来源分别可见 | [`coverage.json`](examples/coverage.json) |
+| `POST /soundstrip/peak` | 选出等效级最高的定长窗口 | 0–10 毫秒、窗长 4 毫秒时峰值窗 `[4, 8)`，整窗由备机证书支持，约 68.75 dB | [`peak.json`](examples/peak.json) |
+| `POST /soundstrip/window` | 复核指定定长窗口的可用性 | `[4, 8)` 可用，贡献读数 `B0`、`B1`，证书 `C-BACKUP` | [`window.json`](examples/window.json) |
 
 `POST` 接收不大于 512 KiB 的 UTF-8 JSON，要求 `application/json`。字段缺失、主键重复、非法范围或冲突合同返回 HTTP 400。可合法表达的未解业务状态仍为 HTTP 200。健康接口为 `GET /health`。
 
@@ -27,6 +31,7 @@
 - `soundstrip/contract.py`：严格字段、范围及标识去重。
 - `soundstrip/calibration.py`：证书生效边界。
 - `soundstrip/splice.py`：多源优先级仲裁。
+- `soundstrip/window.py`：定长窗口支持复核与峰值窗选择。
 - `soundstrip/exposure.py`：时间加权声能。
 
 请求由 WSGI 入口分发给对应领域归约，边界字段由校验层及领域解析器检查；证据随归约返回，不作为后置猜测。对外入口的运行步骤和输出核对见 README。单元测试留置；不含故障预埋、私有评审或后续任务解法。

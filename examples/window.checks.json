@@ -1,0 +1,35 @@
+[
+  [
+    [
+      "status"
+    ],
+    "usable"
+  ],
+  [
+    [
+      "instrument"
+    ],
+    "backup"
+  ],
+  [
+    [
+      "certificate"
+    ],
+    "C-BACKUP"
+  ],
+  [
+    [
+      "readings"
+    ],
+    [
+      "B0",
+      "B1"
+    ]
+  ],
+  [
+    [
+      "equivalent_db"
+    ],
+    68.7520600409689
+  ]
+]

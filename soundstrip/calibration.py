@@ -14,6 +14,7 @@ def span(row):
 @dataclass(frozen=True)
 class Certificate:
     ref: str
+    instrument: str
     start: int
     stop: int
     offset: float
@@ -33,7 +34,8 @@ def load(data):
     by_instrument = {}
     for ref, row in rows(data, 'certificates', 128):
         by_instrument.setdefault(key(row['instrument']), []).append(
-            Certificate(ref, *span(row), decimal(row['offset_db'], -40, 40)))
+            Certificate(ref, key(row['instrument']), *span(row),
+                        decimal(row['offset_db'], -40, 40)))
     for certs in by_instrument.values():
         certs.sort(key=lambda c: c.start)
         for a, b in zip(certs, certs[1:]):
